@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 // Plugins
 import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
+import { DataLocalService } from 'src/app/services/data-local.service';
 
 @Component({
   selector: 'app-tab1',
@@ -9,7 +10,7 @@ import { BarcodeScanner } from '@awesome-cordova-plugins/barcode-scanner/ngx';
 })
 export class Tab1Page {
 
-  constructor(private barcodeScanner: BarcodeScanner) { }
+  constructor(private barcodeScanner: BarcodeScanner, private dataLocal: DataLocalService) { }
 
   slidesOpts = {
     allowSlidePrev: false,
@@ -23,8 +24,12 @@ export class Tab1Page {
   scan() {
     this.barcodeScanner.scan().then(barcodeData => {
       console.log('Barcode data', barcodeData);
+      if (!barcodeData.cancelled) {
+        this.dataLocal.guardarRegistro(barcodeData.format, barcodeData.text);
+      }
     }).catch(err => {
       console.log('Error', err);
+      this.dataLocal.guardarRegistro('QRCode', 'https://fernando-herrera.com');
     });
   }
 
