@@ -28,7 +28,7 @@ export class Tab1Page {
         this.dataLocal.guardarRegistro(barcodeData.format, barcodeData.text);
       }
     }).catch(err => {
-      console.log('Error', err);
+      // console.log('Error', err);
       this.dataLocal.guardarRegistro('QRCode', 'https://fernando-herrera.com');
     });
   }
