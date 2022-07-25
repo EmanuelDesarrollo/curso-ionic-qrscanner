@@ -23,7 +23,7 @@ export class Registro {
                 this.icon = 'globe';
                 break;
             case 'geo:':
-                this.type = 'geolocation';
+                this.type = 'geo';
                 this.icon = 'pin';
                 break;
             default:
