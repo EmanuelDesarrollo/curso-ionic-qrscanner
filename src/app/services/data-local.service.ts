@@ -4,6 +4,9 @@ import { Storage } from '@ionic/storage';
 import { NavController, Platform } from '@ionic/angular';
 import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { File } from '@awesome-cordova-plugins/file/ngx';
+import { EmailComposer } from '@awesome-cordova-plugins/email-composer/ngx';
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,7 +20,8 @@ export class DataLocalService {
     private navCtrl: NavController,
     private iab: InAppBrowser,
     private platform: Platform,
-    private file: File
+    private file: File,
+    private emailComposer: EmailComposer
   ) {
     this.init();
   }
@@ -62,7 +66,6 @@ export class DataLocalService {
   }
 
   enviarCorreo() {
-
     const arrTemp = [];
     const titulo = "Tipo, Formato, Creado en, Texto\n";
 
@@ -73,6 +76,7 @@ export class DataLocalService {
     })
 
     this.crearArchivoFisico(arrTemp.join());
+
   }
 
 
@@ -90,6 +94,24 @@ export class DataLocalService {
 
   async escribirEnArchivo(text: string) {
     await this.file.writeExistingFile(this.file.dataDirectory, 'registros.csv', text);
+
+    const archivo = `${this.file.dataDirectory}registros.csv`;
+
+    const email = {
+      to: 'emanuel.buendia.t@gmail.com',
+      // cc: '',
+      // bcc: ['john@doe.com', 'jane@doe.com'],
+      attachments: [
+        archivo,
+      ],
+      subject: 'Backup de scans',
+      body: 'Aquí tienes los backups de scans.',
+      isHtml: true
+    }
+
+    // Send a text message using default options
+    this.emailComposer.open(email);
+
   }
 
 }
